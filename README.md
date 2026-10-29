@@ -1,53 +1,58 @@
-Project: Fleet Data REST JSON Quickstart
+# rest-json-quickstart
 
-Name:
-rest-json-quickstart - Quarkus-based REST JSON application for processing fleet and equipment telemetry data
+This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
-Synopsis:
-mvn quarkus:dev
+If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
 
-Description:
-This project is a Java-based backend service built with Quarkus designed to parse, analyze, and output equipment and fleet telematics JSON payloads through REST endpoints. It includes data models for engine parameters, machine states, batteries, and diagnostic trouble codes, along with utility scripts for key and fuel value extraction.
+## Running the application in dev mode
 
-Files Included:
-pom.xml
-README.md
-mvnw / mvnw.cmd
-src/main/java/org/acme/
-src/main/resources/
-src/test/java/tests/
-find_keys.py
-find_fuel_values.py
-san_take_home_json_2.json
-san_take_home_json_3.json
-san_take_home_json_4.json
-san_take_home_json_5.json
+You can run your application in dev mode that enables live coding using:
 
-How to Compile:
-1. ./mvnw compile
-2. mvn clean install
-
-How to Run:
+```shell script
 ./mvnw quarkus:dev
+```
 
-Known Bugs:
-N/A
+> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
 
-Endpoints & Features:
-/fleet - retrieves parsed JLG fleet equipment information and status updates.
-Use: curl http://localhost:8080/fleet
+## Packaging and running the application
 
-/fleet/fuel - exposes fuel level statistics and consumption data.
-	Use: curl http://localhost:8080/fleet/fuel
+The application can be packaged using:
 
+```shell script
+./mvnw package
+```
 
-Python Utilities:
-find_keys.py - scans JSON files to extract and map unique keys/telemetry attributes.
-Use: python3 find_fuel_values.py
+It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
+Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
 
-find_fuel_values.py - extracts fuel-specific telemetry data from raw JSON logs.
-	Use: python3 find_keys.py
+The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
 
+If you want to build an _über-jar_, execute the following command:
 
-Environment Configuration:
-application.properties configures HTTP transport, Quarkus development services, and JSON serialization defaults.
+```shell script
+./mvnw package -Dquarkus.package.jar.type=uber-jar
+```
+
+The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
+
+## Creating a native executable
+
+You can create a native executable using:
+
+```shell script
+./mvnw package -Dnative
+```
+
+Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
+
+```shell script
+./mvnw package -Dnative -Dquarkus.native.container-build=true
+```
+
+You can then execute your native executable with: `./target/rest-json-quickstart-1.0.0-SNAPSHOT-runner`
+
+If you want to learn more about building native executables, please consult <https://quarkus.io/guides/maven-tooling>.
+
+## Related Guides
+
+- REST Jackson ([guide](https://quarkus.io/guides/rest#json-serialisation)): Jackson serialization support for Quarkus REST. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on it
